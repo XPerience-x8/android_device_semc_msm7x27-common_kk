@@ -400,17 +400,16 @@ def WriteFullOTAPackage(input_zip, output_zip):
   device_specific.FullOTA_Assertions()
   device_specific.FullOTA_InstallBegin()
 
-  script.Print("                                ")
-  script.Print("                                ")
-  script.Print("    Jelly Bean Mini Project     ")
-  script.Print("                                ")
-  script.Print("                                ")
-  script.Print("   Created by: JB Mini Team     ")
-  script.Print("                                ")
-  script.Print("          Team members:         ")
-  script.Print("       Daveee10, Stelios97      ")
-  script.Print("                                ")
-  script.Print("                                ")
+  script.Print("#######################################");
+  script.Print("#                                     #");
+  script.Print("# (c) 2013 The XPerience Project      #");
+  script.Print("#                                     #");
+  script.Print("#      Creator of the Project         #");
+  script.Print("#           Klozz Jesus               #");
+  script.Print("#                AKA                  #");
+  script.Print("#            TeamMEX in XDA           #");
+  script.Print("#                                     #");
+  script.Print("#######################################");
 
   script.ShowProgress(50, 1)
 
