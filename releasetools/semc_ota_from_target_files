@@ -400,17 +400,16 @@ def WriteFullOTAPackage(input_zip, output_zip):
   device_specific.FullOTA_Assertions()
   device_specific.FullOTA_InstallBegin()
 
-  script.Print("#######################################");
-  script.Print("#                                     #");
-  script.Print("# (c) 2013 The XPerience Project      #");
-  script.Print("#                                     #");
-  script.Print("#      Creator of the Project         #");
-  script.Print("#           Klozz Jesus               #");
-  script.Print("#                AKA                  #");
-  script.Print("#            TeamMEX in XDA           #");
-  script.Print("#                                     #");
-  script.Print("#######################################");
-
+  script.Print("################################");
+  script.Print("#                              #");
+  script.Print("#(c) 2013 The XPerience Project#");
+  script.Print("#                              #");
+  script.Print("#   Creator of the Project     #");
+  script.Print("#        Klozz Jesus           #");
+  script.Print("#             AKA              #");
+  script.Print("#        TeamMEX in XDA        #");
+  script.Print("#                              #");
+  script.Print("################################");
   script.ShowProgress(50, 1)
 
   script.Mount("/system")
@@ -443,7 +442,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
   script.UnmountAll()
 
   script.Print("-> All done! <-")
-
+  script.Print("-> Thnks for Choose XPerience <-")
   script.AddToZip(input_zip, output_zip)
   WriteMetadata(metadata, output_zip)
 
