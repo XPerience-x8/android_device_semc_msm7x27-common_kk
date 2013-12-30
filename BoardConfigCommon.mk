@@ -1,4 +1,5 @@
 # Copyright (C) 2012 The Android Open Source Project
+# Copyright (C) 2013 The XPerience Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,15 +30,15 @@ USE_CAMERA_STUB := true
 include device/qcom/msm7x27/BoardConfigCommon.mk
 
 ## Kernel
-TARGET_SPECIFIC_HEADER_PATH := device/semc/msm7x27-common/include
-TARGET_KERNEL_SOURCE := kernel/semc/msm7x27
-BOARD_KERNEL_CMDLINE := console=null
-BOARD_KERNEL_BASE := 0x00200000
-BOARD_PAGE_SIZE := 0x00000800
+TARGET_SPECIFIC_HEADER_PATH  := device/semc/msm7x27-common/include
+TARGET_KERNEL_SOURCE         := kernel/semc/msm7x27
+BOARD_KERNEL_CMDLINE         := console=null
+BOARD_KERNEL_BASE            := 0x00200000
+BOARD_PAGE_SIZE              := 0x00000800
 BOARD_SDCARD_INTERNAL_DEVICE := /dev/block/mmcblk0p1
-TARGET_NO_BOOTLOADER := true
-TARGET_NO_RADIOIMAGE := true
-BOARD_CUSTOM_BOOTIMG_MK := device/semc/msm7x27-common/custombootimg.mk
+TARGET_NO_BOOTLOADER         := true
+TARGET_NO_RADIOIMAGE         := true
+BOARD_CUSTOM_BOOTIMG_MK      := device/semc/msm7x27-common/custombootimg.mk
 
 ## Platform
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
@@ -67,27 +68,27 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE_LEGACY := msm7x27 # don't use hardware/qc
 BOARD_USES_QCOM_LIBRPC := true
 
 ## Bluetooth
-BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH         := true
 BOARD_HAVE_SAMSUNG_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUEDROID_VENDOR_CONF := device/semc/msm7x27-common/bluetooth/btvendor_semc7x27.txt
+BOARD_HAVE_BLUETOOTH_BCM     := true
+BOARD_BLUEDROID_VENDOR_CONF  := device/semc/msm7x27-common/bluetooth/btvendor_semc7x27.txt
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/semc/msm7x27-common/bluetooth
 
 ## Wi-Fi
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wl12xx
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_wl12xx
-BOARD_WLAN_DEVICE := wl12xx_mac80211
-BOARD_SOFTAP_DEVICE := wl12xx_mac80211
-PRODUCT_DEFAULT_WIFI_CHANNELS := 14
-USES_TI_MAC80211 := true
+BOARD_HOSTAPD_DRIVER             := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_wl12xx
+BOARD_WLAN_DEVICE                := wl12xx_mac80211
+BOARD_SOFTAP_DEVICE              := wl12xx_mac80211
+PRODUCT_DEFAULT_WIFI_CHANNELS    := 14
+USES_TI_MAC80211                 := true
 COMMON_GLOBAL_CFLAGS += -DUSES_TI_MAC80211
 
 ## RIL
-TARGET_PROVIDES_LIBRIL := true
-BOARD_USES_LEGACY_RIL := true
+TARGET_PROVIDES_LIBRIL   := true
+BOARD_USES_LEGACY_RIL    := true
 BOARD_FORCE_RILD_AS_ROOT := true
 
 ## UMS
@@ -113,7 +114,31 @@ TARGET_OTA_EXTRAS_FILE := device/semc/msm7x27-common/releasetools/extras.txt
 SMALLER_FONT_FOOTPRINT := true
 
 ## Recovery
-TARGET_BOOTANIMATION_PRELOAD := true
+TARGET_BOOTANIMATION_PRELOAD       := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
-TARGET_BOOTANIMATION_USE_RGB565 := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+TARGET_BOOTANIMATION_USE_RGB565    := true
+TARGET_RECOVERY_PIXEL_FORMAT       := "RGB_565"
+
+#TWRP config:
+DEVICE_RESOLUTION                := 320x480
+TW_MAX_BRIGHTNESS                := 255
+BOARD_HAS_NO_REAL_SDCARD         := false
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TARGET_RECOVERY_GUI              := true
+TARGET_RECOVERY_PIXEL_FORMAT     := "RGB_565"
+TARGET_USE_CUSTOM_LUN_FILE_PATH  :=/sys/devices/platform/usb_mass_storage/lun0/file
+TW_CUSTOM_POWER_BUTTON           := 107
+TW_EXTERNAL_STORAGE_PATH         := "/sdcard"
+TW_EXTERNAL_STORAGE_MOUNT_POINT  := "sdcard"
+TW_FLASH_FROM_STORAGE            := true
+TW_HAS_DOWNLOAD_MODE             := false
+TW_HAS_NO_RECOVERY_PARTITION     := true
+TW_INCLUDE_CRYPTO                := false
+TW_INCLUDE_JB_CRYPTO             := false
+TW_NEVER_UNMOUNT_SYSTEM          := false
+TW_NO_BATT_PERCENT               := false
+TW_NO_REBOOT_BOOTLOADER          := true
+TW_NO_USB_STORAGE                := false
+TW_SDEXT_NO_EXT4                 := false
+
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
