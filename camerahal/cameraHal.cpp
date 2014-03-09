@@ -1,4 +1,4 @@
-2/*
+/*
  * Copyright (C) 2012, Raviprasad V Mummidi
  * Adapted for kitkat by Klozz jesus AKA TeamMEX
  *
