@@ -34,8 +34,8 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm7x27
 
 # Camera
-PRODUCT_PACKAGES += \
-    camera.msm7x27
+#PRODUCT_PACKAGES += \
+#   camera.msm7x27
 
 # Omx
 PRODUCT_PACKAGES += \

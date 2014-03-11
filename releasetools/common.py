@@ -873,3 +873,4 @@ def GetTypeAndDevice(mount_point, info):
     return PARTITION_TYPES[fstab[mount_point].fs_type], fstab[mount_point].device
   else:
     return None
+
