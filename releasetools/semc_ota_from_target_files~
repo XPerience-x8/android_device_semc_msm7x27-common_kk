@@ -394,13 +394,11 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   script.Print("                                ")
   script.Print("                                ")
-  script.Print("    Jelly Bean Mini Project     ")
+  script.Print("        CM11 XPerience          ")
   script.Print("                                ")
   script.Print("                                ")
-  script.Print("   Created by: JB Mini Team     ")
+  script.Print("      Created by: TeamMEX       ")
   script.Print("                                ")
-  script.Print("          Team members:         ")
-  script.Print("       Daveee10, Stelios97      ")
   script.Print("                                ")
   script.Print("                                ")
 

@@ -18,7 +18,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 # Hardware
 PRODUCT_PACKAGES += \
     gps.delta \
-    sensors.msm7x27 \
     lights.msm7x27 \
     audio.primary.msm7x27 \
     audio_policy.msm7x27 \
@@ -34,8 +33,8 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm7x27
 
 # Camera
-PRODUCT_PACKAGES += \
-    camera.msm7x27
+#PRODUCT_PACKAGES += \
+#    camera.msm7x27
 
 # Omx
 PRODUCT_PACKAGES += \
@@ -76,12 +75,6 @@ PRODUCT_PACKAGES += \
     libfmrx \
     FmRxService \
     Fmapplication
-
-# Bugmailer
-PRODUCT_PACKAGES += send_bug
-PRODUCT_COPY_FILES += \
-        system/extras/bugmailer/bugmailer.sh:system/bin/bugmailer.sh \
-        system/extras/bugmailer/send_bug:system/bin/send_bug
 
 # Permissions
 PRODUCT_COPY_FILES += \

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2013 The XPerience Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,13 +53,13 @@ static const struct sensor_t sSensorList[] = {
                 1, SENSORS_HANDLE_BASE+ID_O,
                 SENSOR_TYPE_ORIENTATION, 360.0f, 1.0f, 7.0f, 0, { } },
         { "APDS9700 Proximity sensor",
-                "nAa",
+                "TeamMEX",
                 1, SENSORS_HANDLE_BASE+ID_P,
                 SENSOR_TYPE_PROXIMITY,
                 PROXIMITY_THRESHOLD_CM, PROXIMITY_THRESHOLD_CM,
                 0.5f, 0, { } },
         { "MSM Light sensor",
-                "nAa",
+                "TeamMEX",
                 1, SENSORS_HANDLE_BASE+ID_L,
                 SENSOR_TYPE_LIGHT, 250.0f, 1.0f, 0.5f, 0, { } },
 };
