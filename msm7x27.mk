@@ -27,11 +27,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.msm7x27
 
-# GPU
-PRODUCT_PACKAGES += \
-    hwcomposer.default \
-    hwcomposer.msm7x27
-
 # Camera
 #PRODUCT_PACKAGES += \
 #    camera.msm7x27
