@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012, Raviprasad V Mummidi
+ * Adapted for Jellybean by Vassilis Tsogkas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "SEMCCameraHAL"
+#define LOG_TAG "CameraHAL"
 
 #include <CameraHardwareInterface.h>
 #include <hardware/hardware.h>
@@ -70,11 +71,11 @@ static hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
    common: {
       tag: HARDWARE_MODULE_TAG,
-      module_api_version: CAMERA_DEVICE_API_VERSION_1_0,
-      hal_api_version: 0,
+      version_major: 1,
+      version_minor: 0,
       id: CAMERA_HARDWARE_MODULE_ID,
-      name: "Camera HAL",
-      author: "Old Xperia Team",
+      name: "Camera HAL for JB",
+      author: "Vassilis Tsogkas",
       methods: &camera_module_methods,
       dso: NULL,
       reserved: {0},
@@ -219,11 +220,6 @@ CameraHAL_HandlePreviewData(const android::sp<android::IMemory>& dataPtr,
       ssize_t  offset;
       size_t   size;
       int32_t  previewFormat = MDP_Y_CBCR_H2V2;
-#ifdef HWA
-      int32_t  destFormat    = MDP_RGBX_8888;
-#else
-      int32_t  destFormat    = MDP_RGBA_8888;
-#endif
 
       android::status_t retVal;
       android::sp<android::IMemoryHeap> mHeap = dataPtr->getMemory(&offset,
@@ -240,11 +236,7 @@ CameraHAL_HandlePreviewData(const android::sp<android::IMemory>& dataPtr,
                          GRALLOC_USAGE_SW_READ_OFTEN);
       retVal = mWindow->set_buffers_geometry(mWindow,
                                              previewWidth, previewHeight,
-#ifdef HWA
-                                             HAL_PIXEL_FORMAT_RGBX_8888
-#else
-                                             HAL_PIXEL_FORMAT_RGBA_8888
-#endif
+                                             HAL_PIXEL_FORMAT_YCrCb_420_SP
                                              );
       if (retVal == NO_ERROR) {
          int32_t          stride;
@@ -256,31 +248,12 @@ CameraHAL_HandlePreviewData(const android::sp<android::IMemory>& dataPtr,
             retVal = mWindow->lock_buffer(mWindow, bufHandle);
             if (retVal == NO_ERROR) {
                private_handle_t const *privHandle =
-                  reinterpret_cast<private_handle_t const *>(*bufHandle);
-               if (!CameraHAL_CopyBuffers_Hw(mHeap->getHeapID(), privHandle->fd,
+                   reinterpret_cast<private_handle_t const *>(*bufHandle);
+               CameraHAL_CopyBuffers_Hw(mHeap->getHeapID(), privHandle->fd,
                                              offset, privHandle->offset,
-                                             previewFormat, destFormat,
+                                             previewFormat, previewFormat,
                                              0, 0, previewWidth,
-                                             previewHeight)) {
-                  void *bits;
-                  android::Rect bounds;
-                  android::GraphicBufferMapper &mapper = android::GraphicBufferMapper::get();
-
-                  bounds.left   = 0;
-                  bounds.top    = 0;
-                  bounds.right  = previewWidth;
-                  bounds.bottom = previewHeight;
-
-                  mapper.lock(*bufHandle, GRALLOC_USAGE_SW_READ_OFTEN, bounds,
-                              &bits);
-                  ALOGV("CameraHAL_HPD: w:%d h:%d bits:%p",
-                       previewWidth, previewHeight, bits);
-                  CameraHal_Decode_Sw((unsigned int *)bits, (char *)mHeap->base() + offset,
-                                      previewWidth, previewHeight);
-
-                  // unlock buffer before sending to display
-                  mapper.unlock(*bufHandle);
-               }
+                                             previewHeight);
 
                mWindow->enqueue_buffer(mWindow, bufHandle);
                ALOGV("CameraHAL_HandlePreviewData: enqueued buffer");
@@ -383,8 +356,10 @@ void
 CameraHAL_FixupParams(android::CameraParameters &settings)
 {
 // FIXME TODO
-   const char *preview_sizes = "640x480,480x320,352x288,320x240,176x144";
-   const char *video_sizes = "640x480,480x320,352x288,320x240,176x144";
+   const char *preview_sizes =
+      "640x480,480x320,352x288,320x240,176x144";
+   const char *video_sizes =
+      "640x480,480x320,352x288,320x240,176x144";
    const char *preferred_size       = "640x480";
    const char *preview_frame_rates  = "30,27,24,15";
    const char *preferred_frame_rate = "15";
@@ -392,14 +367,12 @@ CameraHAL_FixupParams(android::CameraParameters &settings)
    const char *preferred_horizontal_viewing_angle = "51.2";
    const char *preferred_vertical_viewing_angle = "39.4";
 
+
    g_str = settings.flatten();
    char *rc = NULL;
    rc = strdup((char *)g_str.string());
-
-#ifdef DEBUG
    ALOGE("CameraHAL_FixupParams: dumped rc:%p :%s\n",
         rc, (rc != NULL) ? rc : "EMPTY STRING");
-#endif
 
    settings.set(android::CameraParameters::KEY_VIDEO_FRAME_FORMAT,
                 android::CameraParameters::PIXEL_FORMAT_YUV420SP);
@@ -408,6 +381,11 @@ CameraHAL_FixupParams(android::CameraParameters &settings)
       settings.set(android::CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
                    preview_sizes);
    }
+
+   /*if (!settings.get(android::CameraParameters::KEY_SUPPORTED_VIDEO_SIZES)) {
+      settings.set(android::CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
+                   video_sizes);
+   }*/
 
    if (!settings.get(android::CameraParameters::KEY_VIDEO_SIZE)) {
       settings.set(android::CameraParameters::KEY_VIDEO_SIZE, preferred_size);
@@ -543,20 +521,21 @@ qcamera_preview_enabled(struct camera_device * device)
    return qCamera->previewEnabled() ? 1 : 0;
 }
 
-#ifndef DISABLE_META
 int
 qcamera_store_meta_data_in_buffers(struct camera_device * device, int enable)
 {
    ALOGV("qcamera_store_meta_data_in_buffers:\n");
    return NO_ERROR;
 }
-#endif
 
 int
 qcamera_start_recording(struct camera_device * device)
 {
    ALOGV("qcamera_start_recording\n");
-
+//   if(qcamera_preview_enabled(device)){
+//       ALOGD("Preview was enabled");
+//       qcamera_stop_preview(device);
+//   }
    /* TODO: Remove hack. */
    qCamera->enableMsgType(CAMERA_MSG_VIDEO_FRAME);
    qCamera->startRecording();
@@ -719,7 +698,7 @@ qcamera_device_open(const hw_module_t* module, const char* name,
 
    void *libcameraHandle;
    int cameraId = atoi(name);
-   signal(SIGFPE,(*sighandle));
+   signal(SIGFPE,(*sighandle)); //@nAa: Bad boy doing hacks
 
    ALOGD("qcamera_device_open: name:%s device:%p cameraId:%d\n",
         name, device, cameraId);
@@ -768,11 +747,7 @@ qcamera_device_open(const hw_module_t* module, const char* name,
    camera_ops->start_preview              = qcamera_start_preview;
    camera_ops->stop_preview               = qcamera_stop_preview;
    camera_ops->preview_enabled            = qcamera_preview_enabled;
-#ifndef DISABLE_META
    camera_ops->store_meta_data_in_buffers = qcamera_store_meta_data_in_buffers;
-#else
-   camera_ops->store_meta_data_in_buffers = NULL;
-#endif
    camera_ops->start_recording            = qcamera_start_recording;
    camera_ops->stop_recording             = qcamera_stop_recording;
    camera_ops->recording_enabled          = qcamera_recording_enabled;

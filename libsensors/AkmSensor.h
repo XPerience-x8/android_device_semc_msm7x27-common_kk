@@ -23,7 +23,7 @@
 #include <sys/types.h>
 
 
-#include "sensors.h"
+#include "nusensors.h"
 #include "SensorBase.h"
 #include "InputEventReader.h"
 
@@ -37,30 +37,24 @@ public:
     virtual ~AkmSensor();
 
     enum {
-		Accelerometer = 0,
-        MagneticField,
-        Orientation,
+        Accelerometer   = 0,
+        MagneticField   = 1,
+        Orientation     = 2,
         numSensors
     };
 
-    virtual int readEvents(sensors_event_t* data, int count);
     virtual int setDelay(int32_t handle, int64_t ns);
-    virtual int setEnable(int32_t handle, int enabled);
-    virtual int64_t getDelay(int32_t handle);
-    virtual int getEnable(int32_t handle);
-	int setAccel(sensors_event_t* data);
+    virtual int enable(int32_t handle, int enabled);
+    virtual int readEvents(sensors_event_t* data, int count);
+    void processEvent(int code, int value);
 
 private:
-    int mEnabled[numSensors];
-	int64_t mDelay[numSensors];
+    int update_delay();
+    uint32_t mEnabled;
     uint32_t mPendingMask;
     InputEventCircularReader mInputReader;
     sensors_event_t mPendingEvents[numSensors];
-	char input_sysfs_path[PATH_MAX];
-	int input_sysfs_path_len;
-
-	int handle2id(int32_t handle);
-    void processEvent(int code, int value);
+    uint64_t mDelays[numSensors];
 };
 
 /*****************************************************************************/

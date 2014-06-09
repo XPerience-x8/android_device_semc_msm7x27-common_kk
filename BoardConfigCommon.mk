@@ -1,36 +1,98 @@
-# Copyright (C) 2012 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+TARGET_SPECIFIC_HEADER_PATH := device/semc/msm7x27-common/include
 
-#
-# This file sets variables that control the way modules are built
-# throughout the system. It should not be used to conditionally
-# disable makefiles (the proper mechanism to control what gets
-# included in a build is to use PRODUCT_PACKAGES in a product
-# definition file).
-#
+# Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/semc/msm7x27-common/bluedroid
 
-# WARNING: This line must come *before* including the proprietary
-# variant, so that it gets overwritten by the parent (which goes
-# against the traditional rules of inheritance).
+## Camera
 USE_CAMERA_STUB := true
+BOARD_USES_ECLAIR_LIBCAMERA := true
+BOARD_NEEDS_MEMORYHEAPPMEM := true
+BUILD_CAMERAHAL := true
+TARGET_DISABLE_ARM_PIE := true
+BOARD_CPU_COLOR_CONVERT := true
+BOARD_USES_LEGACY_CAMERA := true
 
-# Use the Qualcomm common folder
-include device/qcom/msm7x27/BoardConfigCommon.mk
+# CPU
+TARGET_ARCH := arm
+TARGET_CPU_ABI := armeabi
+TARGET_CPU_ABI2 := armeabi-v6l
+TARGET_CPU_VARIANT := arm11
+TARGET_ARCH_VARIANT := armv6-vfp
+TARGET_BOARD_PLATFORM := msm7x27
+TARGET_ARCH_LOWMEM := true
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
+
+# GPS
+BOARD_USES_QCOM_GPS := true
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := msm7x27
+BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
+
+# Bluetooth
+BOARD_HAVE_BLUETOOTH := true
+
+## Lights
+TARGET_PROVIDES_LIBLIGHTS := true
+
+## RIL
+BOARD_USES_LEGACY_RIL :=true
+
+## Usb
+BOARD_USE_USB_MASS_STORAGE_SWITCH := true
+BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
+TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
+
+## Custom CFLAGS
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DTARGET_MSM7x27
+COMMON_GLOBAL_CFLAGS += -DQCOM_ICS_COMPAT -DQCOM_NO_SECURE_PLAYBACK
+#COMMON_GLOBAL_CFLAGS += -DMISSING_EGL_PIXEL_FORMAT_YV12 -DMISSING_GRALLOC_BUFFERS -DMISSING_EGL_EXTERNAL_IMAGE
+COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT
+COMMON_GLOBAL_CFLAGS += -DECLAIR_LIBCAMERA
+COMMON_GLOBAL_CFLAGS += -DQCOM_LEGACY_OMX
+COMMON_GLOBAL_CFLAGS += -DANCIENT_GL
+
+#COMMON_GLOBAL_CFLAGS += -DTARGET_MSM7x27
+#COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
+#COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
+#COMMON_GLOBAL_CFLAGS += -DQCOM_ICS_COMPAT
+
+#COMMON_GLOBAL_CFLAGS += -DICS_AUDIO_BLOB
+#COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
+#COMMON_GLOBAL_CFLAGS += -DCPU_COLOR_CONVERT
+#COMMON_GLOBAL_CFLAGS += -DMISSING_EGL_EXTERNAL_IMAGE -DMISSING_GRALLOC_BUFFERS
+#COMMON_GLOBAL_CFLAGS += -DMISSING_EGL_PIXEL_FORMAT_YV12
+
+#COMMON_GLOBAL_CFLAGS += -DBOARD_GL_OES_EGL_IMG_EXTERNAL_HACK
+#COMMON_GLOBAL_CFLAGS += -DFORCE_CPU_UPLOAD
+#COMMON_GLOBAL_CFLAGS += -DEGL_TRACE
+#COMMON_GLOBAL_CFLAGS += -D_INTERNAL_BINDER_PARCEL_
+
+### Webkit and browser
+#PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
+TARGET_FORCE_CPU_UPLOAD := true
+JS_ENGINE := v8
+HTTP := chrome
+ENABLE_JSC_JIT := true
+
+## HW ACCEL
+BOARD_EGL_CFG := device/semc/msm7x27-common/prebuilt/egl.cfg
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_QCOM_DISPLAY_VARIANT := legacy
+BOARD_EGL_WORKAROUND_BUG_10194508 := true
+USE_OPENGL_RENDERER := true
+TARGET_NO_HW_VSYNC := true
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
+BOARD_USE_MHEAP_SCREENSHOT := true
+BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+BUILD_WITH_FULL_STAGEFRIGHT=true
+BOARD_EGL_NEEDS_LEGACY_FB := true
+BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+TARGET_NO_SEPARATE_RECOVERY := true
+
+# QCOM enhanced A/V
+TARGET_QCOM_MEDIA_VARIANT := legacy
+TARGET_ENABLE_AV_ENHANCEMENTS := true
 
 ## Kernel
-TARGET_SPECIFIC_HEADER_PATH := device/semc/msm7x27-common/include
-TARGET_KERNEL_SOURCE := kernel/semc/msm7x27
 BOARD_KERNEL_CMDLINE := console=null
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_PAGE_SIZE := 0x00000800
@@ -38,83 +100,55 @@ BOARD_SDCARD_INTERNAL_DEVICE := /dev/block/mmcblk0p1
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 BOARD_CUSTOM_BOOTIMG_MK := device/semc/msm7x27-common/custombootimg.mk
+#TARGET_KERNEL_SOURCE := kernel/semc/msm7x30
+#TARGET_NO_KERNEL := true
 
-## Platform
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
+## Audio
+TARGET_PROVIDES_LIBAUDIO := true
+BOARD_USES_GENERIC_AUDIO := false
+#BOARD_COMBO_DEVICE_SUPPORTED := true
+#BOARD_USES_AUDIO_LEGACY := false
 
-## WebKit
-ENABLE_WEBGL := true
-TARGET_WEBKIT_USE_MORE_MEMORY := true
-
-## Camera
-BOARD_USES_ECLAIR_LIBCAMERA := true
-COMMON_GLOBAL_CFLAGS += -DECLAIR_LIBCAMERA
-COMMON_GLOBAL_CFLAGS += -DICS_CAMERA_BLOB
-BUILD_CAMERAHAL := true
-TARGET_DISABLE_METADATA_IN_BUFFERS := true
-#BOARD_CPU_COLOR_CONVERT := true
-
-## Qualcomm, display
-COMMON_GLOBAL_CFLAGS += -DREFRESH_RATE=60
-COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT
-BOARD_EGL_NEEDS_LEGACY_FB := true
-TARGET_GLOBAL_CPPFLAGS += -mfpu=vfp -mfloat-abi=softfp -Os
-
-## GPS
-BOARD_USES_QCOM_GPS := true
-BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
-BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE_LEGACY := msm7x27 # don't use hardware/qcom/gps version yet
-BOARD_USES_QCOM_LIBRPC := true
-
-## Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_SAMSUNG_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUEDROID_VENDOR_CONF := device/semc/msm7x27-common/bluetooth/btvendor_semc7x27.txt
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/semc/msm7x27-common/bluetooth
-
-## Wi-Fi
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-WPA_SUPPLICANT_VERSION := VER_0_8_X
+## Wifi & hotspot
+BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wl12xx
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_wl12xx
-BOARD_WLAN_DEVICE := wl12xx_mac80211
-BOARD_SOFTAP_DEVICE := wl12xx_mac80211
-PRODUCT_DEFAULT_WIFI_CHANNELS := 14
+BOARD_HOSTAPD_DRIVER             := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_wl12xx
+BOARD_WLAN_DEVICE                := wl12xx_mac80211
+BOARD_SOFTAP_DEVICE              := wl12xx_mac80211
 USES_TI_MAC80211 := true
+
+# Required for newer wpa_supplicant_8_ti versions to fix tethering
+BOARD_WIFI_SKIP_CAPABILITIES := true
+
 COMMON_GLOBAL_CFLAGS += -DUSES_TI_MAC80211
 
-## RIL
-TARGET_PROVIDES_LIBRIL := true
-BOARD_USES_LEGACY_RIL := true
-BOARD_FORCE_RILD_AS_ROOT := true
+# Bluetooth
+BOARD_WPAN_DEVICE := true
+BOARD_HAVE_BLUETOOTH_TI := true
 
-## UMS
-BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
-TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
+# FM Radio
+TARGET_PROVIDES_TI_FM_SERVICE := true
+#BOARD_HAVE_QCOM_FM := true
+#COMMON_GLOBAL_CFLAGS += -DQCOM_FM_ENABLED -DHAVE_SEMC_FM_RADIO
 
-## Legacy touchscreen support
-BOARD_USE_LEGACY_TOUCHSCREEN := true
+## Odex
+WITH_DEXPREOPT := false
 
-## Device specific libs
-TARGET_PROVIDES_LIBAUDIO := true
-TARGET_PROVIDES_LIBLIGHT := true
-
-## SEMC has weird framebuffer
-TARGET_NO_INITLOGO := true
-
-## Fix colors in panorama mode
-BOARD_CPU_COLOR_CONVERT := true
-
-## OTA package maker
-TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/semc/msm7x27-common/releasetools/semc_ota_from_target_files
-#TARGET_OTA_EXTRAS_FILE := device/semc/msm7x27-common/releasetools/extras.txt
-SMALLER_FONT_FOOTPRINT := true
-
+## Bootanimation
+TARGET_BOOTANIMATION_PRELOAD := true
 
 ## Recovery
-TARGET_BOOTANIMATION_PRELOAD := true
-TARGET_BOOTANIMATION_TEXTURE_CACHE := true
-TARGET_BOOTANIMATION_USE_RGB565 := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+TARGET_RECOVERY_PRE_COMMAND := "touch /cache/recovery/boot;sync;"
+#BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/semc/msm7x27-common/recovery/recovery_keys.c
+
+## A custom ota package maker for a device without a boot partition
+TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/semc/msm7x27-common/releasetools/semc_ota_from_target_files
+
+## Prelinks
+PRODUCT_SPECIFIC_DEFINES += TARGET_PRELINKER_MAP=$(TOP)/device/semc/msm7x27-common/prelink-linux-arm-msm7x27.map
+
+## Misc
+#BOARD_USE_LEGACY_TOUCHSCREEN := true
+

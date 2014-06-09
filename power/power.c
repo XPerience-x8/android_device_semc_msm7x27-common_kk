@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define LOG_TAG "JBMP PowerHAL"
+#define LOG_TAG "Klzz PowerHAL"
 #include <utils/Log.h>
 
 #include <hardware/hardware.h>
