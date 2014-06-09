@@ -178,11 +178,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.camcorder.disablemeta=1
 
 # Dalvik
+PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.checkjni=false \
-    dalvik.vm.dexopt-data-only=1 \
-    dalvik.vm.dexopt-flags=v=a,o=v,m=y,u=y \
     dalvik.vm.heaptargetutilization=0.25 \
+    dalvik.vm.dexopt-data-only=1 \
     dalvik.vm.jit.codecachesize=0
 
 # we have enough storage space to hold precise GC data
